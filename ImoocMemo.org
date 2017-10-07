@@ -1,0 +1,4 @@
+* Imooc
+** UserInfo
+*** longin(request, user)
+the login method need two arrtibute. first is request, two is user.
