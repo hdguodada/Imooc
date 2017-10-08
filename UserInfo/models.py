@@ -9,6 +9,7 @@ class UserProfile(AbstractUser):
     birthday = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=20, choices=(('male', 'man'), ('female', 'woman')))
     address = models.CharField(max_length=100, null=True, blank=True)
+    mobilephone = models.IntegerField(unique=True, null=True)
 
     class Meta:
         verbose_name = 'UserInfo'

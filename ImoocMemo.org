@@ -2,3 +2,23 @@
 ** UserInfo
 *** longin(request, user)
 the login method need two arrtibute. first is request, two is user.
+*** email authenticate
+    SCHEDULED: <2017-10-08 日>
+#+BEGIN_SRC python
+  from django.contrib.auth.backends import ModelBackend
+  from .models import UserProfile
+  from django.db.models import Q
+
+
+  class CustomBackend(ModelBackend):
+      def authenticate(self, username=None, password=None, **kwargs):
+          try:
+              user = UserProfile.objects.get(Q(username=usernmae)|Q(email=username))
+              if user.check_password(password):
+                  return user
+          except Exception as e:
+              return None
+
+  # settings.py
+  AUTHTICATION_BACKEND = ['UserInfo.views.CustomBackend', ]
+#+END_SRC

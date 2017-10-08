@@ -1,10 +1,24 @@
 from django.shortcuts import render, reverse
 from django.views.generic.base import View
-from .forms import LoginForm
+from .forms import LoginForm, RegisterForm
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.auth.backends import ModelBackend
+from .models import UserProfile
+from django.db.models import Q
 
 # Create your views here.
+
+# email authenticate
+class CustomBackend(ModelBackend):
+    def authenticate(self, username=None, password=None, **kwargs):
+        try:
+            user = UserProfile.objects.get(Q(username=username)|Q(email=username)|Q(mobilephone=username))
+            if user.check_password(password):
+                return user
+        except Exception as e:
+            return None
+
 
 class IndexView(View):
     def get(self, request):
@@ -44,3 +58,15 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return HttpResponseRedirect(reverse('index'))
+
+
+# register
+class RegisterView(View):
+    def get(self, request):
+        register_form = RegisterForm()
+        return render(request, 'register.html', {
+            'register_form': register_form,
+        })
+
+    def post(self, request):
+        pass

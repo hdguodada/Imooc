@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', IndexView.as_view(), name='index'),
     url(r'^user/', include('UserInfo.urls', namespace='user')),
+    url(r'captcha/', include('captcha.urls')),
 ]

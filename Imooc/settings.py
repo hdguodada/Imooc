@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'UserInfo',
+    'captcha',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +126,4 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 AUTH_USER_MODEL = 'UserInfo.UserProfile'
+AUTHENTICATION_BACKENDS = ('UserInfo.views.CustomBackend',)
