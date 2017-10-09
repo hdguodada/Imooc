@@ -127,3 +127,11 @@ STATICFILES_DIRS = [
 ]
 AUTH_USER_MODEL = 'UserInfo.UserProfile'
 AUTHENTICATION_BACKENDS = ('UserInfo.views.CustomBackend',)
+
+# email
+EMAIL_HOST = 'smtp.sina.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = '18358928574@sina.cn'
+EMAIL_HOST_PASSWORD = 'yumo20160628'
+EMAIL_USE_TLS = True
+EMAIL_FROM = '18358928574@sina.cn'

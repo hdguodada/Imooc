@@ -17,3 +17,30 @@ class UserProfile(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+class UserMessage(models.Model):
+    user = models.ForeignKey(UserProfile)
+    message = models.CharField(max_length=500, verbose_name='message')
+    has_read = models.BooleanField(default=False)
+    add_time = models.DateTimeField(default=datetime.now)
+
+    class Meta:
+        verbose_name_plural = 'usermessage'
+        pass
+    def __str__(self):
+        return self.message
+
+
+class EmailVerifyRecord(models.Model):
+    code = models.CharField(max_length=20)
+    email = models.EmailField(max_length=50)
+    send_type = models.CharField(max_length=18, choices=(('register', 'email'), ('forget', 'modifypassword'), ('update_email', 'modify_email')))
+    has_user = models.BooleanField(default=False)
+    send_time = models.DateTimeField(default=datetime.now)
+    class Meta:
+        verbose_name_plural = 'emailcode'
+        pass
+
+    def __str__(self):
+        return self.send_type
