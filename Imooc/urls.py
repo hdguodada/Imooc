@@ -16,10 +16,18 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from UserInfo.views import IndexView
+from django.views.static import serve
+from Imooc.settings import MEDIA_ROOT
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    # 首页
     url(r'^$', IndexView.as_view(), name='index'),
+    # 用户中心
     url(r'^user/', include('UserInfo.urls', namespace='user')),
+    # 验证码
     url(r'captcha/', include('captcha.urls')),
+    # media url
+    url(r'media/(?P<path>.*)$', serve, {'document_root':MEDIA_ROOT}),
+
 ]

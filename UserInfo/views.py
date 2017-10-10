@@ -10,6 +10,7 @@ from django.contrib.auth.hashers import make_password
 from util.send_email import send_register_email
 import datetime
 from django.utils import timezone
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
@@ -177,6 +178,7 @@ class ModifyPwd(View):
 
 
 # UserInfo
-class UserInfoView(View):
+class UserInfoView(LoginRequiredMixin, View):
+    login_url = 'user:login'
     def get(self, request):
         return render(request, 'usercenter-info.html')

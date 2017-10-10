@@ -61,3 +61,22 @@ from django.core.mail import send_mail
 email_title = ''
 email_body = ''
 email_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
+*** media
+1. Imooc/urls.py
+from django.views.static import serve
+from Imooc.settins import MEDIA_ROOT
+
+urlpatterns = [
+    # media url
+    url(r'media/(?P<path>.*)$', serve, {'document_root':MEDIA_ROOT}),
+]
+
+
+2. settings.py
+
+MEDIA_URL = '/media/'
+# 文件上传路径
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+3. html
+{{ request.user.url }}
