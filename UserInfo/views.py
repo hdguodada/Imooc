@@ -1,6 +1,6 @@
 from django.shortcuts import render, reverse
 from django.views.generic.base import View
-from .forms import LoginForm, RegisterForm, ForgetPasswordForm, ModifyPasswordForm
+from .forms import LoginForm, RegisterForm, ForgetPasswordForm, ModifyPasswordForm, ImageForm
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.backends import ModelBackend
@@ -11,6 +11,7 @@ from util.send_email import send_register_email
 import datetime
 from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
+import json
 
 # Create your views here.
 
@@ -182,3 +183,39 @@ class UserInfoView(LoginRequiredMixin, View):
     login_url = 'user:login'
     def get(self, request):
         return render(request, 'usercenter-info.html')
+
+
+
+# 个人头像
+class ImageUploadView(View):
+    def post(self, request):
+        image_form = ImageForm(request.POST, request.FILES, instance=request.user)
+        res = dict()
+        if image_form.is_valid():
+            image_form.save()
+            res['status'] = 'success'
+            res['msg'] = '头像修改成功'
+        else:
+            res['status'] = 'Fail'
+            res['msg'] = '头像修改失败'
+        return HttpResponse(json.dumps(res), content_type='application/json')
+
+
+# 个人中心更新密码
+class UpdatePwdView(View):
+    def post(self, request):
+        modify_form = ModifyPasswordForm(request.POST)
+        res = dict()
+        if modify_form.is_valid():
+            password1 = request.POST.get('password1')
+            password2 = request.POST.get('password2')
+            user = request.user
+            if password1 != password2:
+                res['status'] = 'fail'
+                res['msg'] = '两次密码不一样'
+                return HttpResponse(json.dumps(res), content_type='application/json')
+            res['status'] = 'success'
+            res['msg'] = '密码修改成功'
+            return HttpResponse(json.dumps(res), content_type='application/json')
+        res = modify_form.errors
+        return HttpResponse(json.dumps(res), content_type='application/json')

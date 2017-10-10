@@ -24,3 +24,9 @@ class ForgetPasswordForm(forms.Form):
 class ModifyPasswordForm(forms.Form):
     password1 = forms.CharField(required=True, min_length=6)
     password2 = forms.CharField(required=True, min_length=6)
+
+
+class ImageForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['image']

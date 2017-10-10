@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from .views import LoginView, LogoutView, RegisterView, ActiveView, ForgetPasswordView, ResetPassword
-from .views import ModifyPwd, UserInfoView
+from .views import ModifyPwd, UserInfoView, ImageUploadView
 
 urlpatterns = [
     # login
@@ -19,5 +19,8 @@ urlpatterns = [
     url('modifypassword/$', ModifyPwd.as_view(), name='modify'),
     # usercenter
     url('usercenter/$', UserInfoView.as_view(), name='usercenter'),
+    # image upload
+    url('image_upload/$', ImageUploadView.as_view(), name='image_upload'),
+
 
 ]
