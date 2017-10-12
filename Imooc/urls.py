@@ -18,9 +18,10 @@ from django.contrib import admin
 from UserInfo.views import IndexView
 from django.views.static import serve
 from Imooc.settings import MEDIA_ROOT
+import xadmin
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', xadmin.site.urls),
     # 首页
     url(r'^$', IndexView.as_view(), name='index'),
     # 用户中心

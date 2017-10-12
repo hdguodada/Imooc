@@ -28,6 +28,12 @@ def send_register_email(email, send_type='register'):
         send_status = send_mail(email_titile, email_body, EMAIL_FROM, [email])
         if send_status:
             pass
+    if send_type == 'update_email':
+        email_titile = 'update_email'
+        email_body = 'your update_email code is {}.'.format(code)
+        send_status = send_mail(email_titile, email_body, EMAIL_FROM, [email])
+        if send_status:
+            pass
 
 
 def random_str(random_length=16):
