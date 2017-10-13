@@ -30,5 +30,7 @@ urlpatterns = [
     url(r'captcha/', include('captcha.urls')),
     # media url
     url(r'media/(?P<path>.*)$', serve, {'document_root':MEDIA_ROOT}),
+    # course
+    url(r'^course/', include('CourseInfo.urls', namespace='course'))
 
 ]
