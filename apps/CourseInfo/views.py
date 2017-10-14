@@ -36,7 +36,10 @@ class CourseView(View):
 
 class CourseDetailView(View):
     def get(self, request, course_id):
-        return render(request, 'course-detail.html')
+        course = Course.objects.get(id=course_id)
+        return render(request, 'course-detail.html', {
+            'course': course,
+        })
 
 
 class TeacherView(View):

@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'CourseInfo',
     'OrganizationInfo',
     'pure_pagination',
+    'operation',
 ]
 
 MIDDLEWARE = [
