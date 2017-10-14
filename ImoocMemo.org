@@ -80,3 +80,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 3. html
 {{ request.user.url }}
+** organizationinfo
+*** get foreinkey nums
+def get_teacher_nums(self):
+    return self.teacher_set.all().count()

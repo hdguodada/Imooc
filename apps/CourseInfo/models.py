@@ -1,5 +1,5 @@
 from django.db import models
-from OrganizationInfo.models import Organization
+from OrganizationInfo.models import Organization, Teacher
 from operation.models import Course_tag, Course_category
 from datetime import datetime
 
@@ -12,7 +12,7 @@ class Course(models.Model):
     image = models.ImageField(null=True, blank=True, upload_to='course_image/%Y/%m')
     learn_num = models.IntegerField(default=0)
     fav_num = models.IntegerField(default=0)
-    organization = models.ForeignKey(Organization)
+    organization = models.ForeignKey(Organization, null=True, blank=True)
     click_num = models.IntegerField(default=0)
     desc = models.CharField(max_length=200, null=True, blank=True)
     course_tag = models.ForeignKey(Course_tag, null=True, blank=True)
@@ -22,5 +22,8 @@ class Course(models.Model):
     teacher_tell_you = models.TextField(null=True, blank=True)
     degree= models.CharField(choices=(('1', 'level 1'), ('2', 'level 2'), ('3', 'level 3')), max_length=10, default='1')
     add_time = models.DateTimeField(default=datetime.now)
+    teacher = models.ForeignKey(Teacher, blank=True, null=True)
+
+
     def __str__(self):
         return self.name
