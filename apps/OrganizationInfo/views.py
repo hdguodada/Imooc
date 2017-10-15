@@ -11,6 +11,7 @@ class OrgListView(View):
     def get(self, request):
         org_list = Organization.objects.all()
         all_city = CityDict.objects.all()
+        hot_org = Organization.objects.all().order_by('-fav_nums')[:3]
         category = request.GET.get('ct', '')
         city_id = request.GET.get('city', '')
         if category:
@@ -27,7 +28,7 @@ class OrgListView(View):
         except PageNotAnInteger:
             page = 1
 
-        p = Paginator(org_list, 3, request=request)
+        p = Paginator(org_list, 10, request=request)
         org = p.page(page)
 
         return render(request, 'org-list.html', {
@@ -37,4 +38,5 @@ class OrgListView(View):
             'city_id': city_id,
             'category': category,
             'org_num': org_num,
+            'hot_org': hot_org,
         })

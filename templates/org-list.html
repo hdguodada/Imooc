@@ -31,7 +31,7 @@
 				</li>
 			</ul>
 		</div>
-		<div class="all">共<span class="key">15</span>家</div>
+        <div class="all">共<span class="key">{{ org_num }}</span>家</div>
 		<div class="butler_list company list">
 		<div class="layout">
 			<div class="head">
@@ -77,36 +77,32 @@
                 </dl>
                {% endfor %}
 
+                            <!-- fenyeqi  -->
+                            <div class="pageturn">
+                              <ul class="pagelist">
+                                {% if org_list.has_previous %}
+                                <li class="long">
+                                  <a href="?{{ org_list.previous_page_number.querystring }}" class="prev">last page</a>
+                                </li>
+                                {% endif %}
+
+                                {% for page in org_list.pages %}
+                                {% if page %}
+                                {% if page == org_list.number %}
+                                <li class="active"><a href="?{{ page.querystring }}" class="page">{{ page }}</a> </li>
+                                {% else %}
+                                <li><a href="?{{ page.querystring }}" class="page">{{ page }}</a></li>
+                                {% endif %}
+                                {% else %}
+                                <li class="none"><a href="">...</a></li>
+                                {% endif %}
+                                {% endfor %}
+                                {% if org_list.has_next %}
+                                <li class="long"><a href="?{{ org_list.next_page_number.querystring }}">next page</a></li>
+                                  {% endif %}
+                              </ul>
+                            </div>
 		</div>
-		 <div class="pageturn">
-            <ul class="pagelist">
-                
-
-                
-                    
-                        
-                            <li class="active"><a href="?page=1">1</a></li>
-                        
-                    
-                
-                    
-                        
-                            <li><a href="?page=2" class="page">2</a></li>
-                        
-                    
-                
-                    
-                        
-                            <li><a href="?page=3" class="page">3</a></li>
-                        
-                    
-                
-                
-                    <li class="long"><a href="?page=2">下一页</a></li>
-                
-
-            </ul>
-        </div>
 		</div>
 	</div>
 	<div class="right companyright">
@@ -132,33 +128,16 @@
 
 		<div class="right companyrank layout">
 			<div class="head">授课机构排名</div>
-
+                {% for hot in hot_org %}
             
                 <dl class="des">
-                    <dt class="num fl">1</dt>
+                    <dt class="num fl">{{ forloop.counter }}</dt>
                     <dd>
-                        <a href="/company/2/"><h1>慕课网</h1></a>
-                        <p>北京市</p>
+                        <a href="/company/2/"><h1>{{ hot.name }}</h1></a>
+                        <p>{{ hot.address }}</p>
                     </dd>
                 </dl>
-            
-                <dl class="des">
-                    <dt class="num fl">2</dt>
-                    <dd>
-                        <a href="/company/2/"><h1>慕课网2</h1></a>
-                        <p>深圳市</p>
-                    </dd>
-                </dl>
-            
-                <dl class="des">
-                    <dt class="num fl">3</dt>
-                    <dd>
-                        <a href="/company/2/"><h1>北京大学</h1></a>
-                        <p>北京市</p>
-                    </dd>
-                </dl>
-            
-
+                {% endfor %}
 
 
 		</div>
