@@ -29,8 +29,9 @@ class CourseView(View):
 
         return render(request, 'course-list.html', {
             'all_courses': courses,
-            'current_page': request.GET.get('sort'),
+            'current_page': 'course',
             'hot_courses': hot_courses,
+            'sort':request.GET.get('sort'),
         })
 
 

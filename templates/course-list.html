@@ -1,4 +1,4 @@
-{% extends 'course-base.html' %}
+{% extends 'base.html' %}
 {% block content %}
 <section>
 	<div class="wp">
@@ -6,9 +6,9 @@
 			<div class="left layout">
 				<div class="head">
 					<ul class="tab_header">
-						<li {% ifequal current_page '' %}class="active"{% endifequal %}><a href="?sort=">最新 </a></li>
-						<li {% ifequal current_page 'hot' %}class="active"{% endifequal %}><a href="?sort=hot">最热门</a></li>
-						<li {% ifequal current_page 'students' %}class="active"{% endifequal %}><a href="?sort=students">参与人数</a></li>
+						<li {% ifequal sort '' %}class="active"{% endifequal %}><a href="?sort=">最新 </a></li>
+						<li {% ifequal sort 'hot' %}class="active"{% endifequal %}><a href="?sort=hot">最热门</a></li>
+						<li {% ifequal sort 'students' %}class="active"{% endifequal %}><a href="?sort=students">参与人数</a></li>
 					</ul>
 				</div>
                 <div id="inWindow">
