@@ -87,3 +87,17 @@ def get_teacher_nums(self):
 
 *** Stringformat
 {{ city.id|stringformat:'i' %}
+** xadmin
+*** 侧边栏中文化
+在应用里的apps.py中 添加 verbose_name
+#+BEGIN_SRC python
+from django.apps import AppConfig
+
+
+class CourseinfoConfig(AppConfig):
+    name = 'CourseInfo'
+    verbose_name = '课程信息'
+#+END_SRC
+
+在同级目录下的__init__.py中导入配置
+default_app_config = 'CourseInfo.apps.CourseinfoConfig'
