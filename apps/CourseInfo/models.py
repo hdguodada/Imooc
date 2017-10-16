@@ -7,6 +7,7 @@ from datetime import datetime
 # 课程方向
 class Course_tag(models.Model):
     name = models.CharField(max_length=20, verbose_name='课程方向')
+    course = models.ManyToManyField('Course', related_name='course_tags')
 
     def __str__(self):
         return self.name
@@ -19,6 +20,7 @@ class Course_tag(models.Model):
 # 课程分类
 class Course_category(models.Model):
     name = models.CharField(max_length=20, verbose_name='课程分类')
+    course = models.ManyToManyField('Course', related_name='course_categories')
 
     def __str__(self):
         return self.name
@@ -31,6 +33,7 @@ class Course_category(models.Model):
 # 课程类型
 class Course_style(models.Model):
     name = models.CharField(max_length=20, verbose_name='课程类型')
+    course = models.ManyToManyField('Course', related_name='course_styles')
 
     def __str__(self):
         return self.name
@@ -50,9 +53,6 @@ class Course(models.Model):
     organization = models.ForeignKey(Organization, null=True, blank=True, verbose_name='所属机构')
     click_num = models.IntegerField(default=0, verbose_name='点击数')
     desc = models.CharField(max_length=200, null=True, blank=True, verbose_name='课程简介')
-    course_tag = models.ForeignKey(Course_tag, null=True, blank=True, verbose_name='课程方向')
-    category = models.ForeignKey(Course_category, null=True, blank=True, verbose_name='课程分类')
-    course_style = models.ManyToManyField(Course_style, blank=True, verbose_name='课程类型')
     detail = models.TextField(null=True, blank=True, verbose_name='课程详情')
     you_need_know = models.TextField(null=True, blank=True, verbose_name='课程须知')
     teacher_tell_you = models.TextField(null=True, blank=True, verbose_name='讲师通知')

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'OrganizationInfo',
     'pure_pagination',
     'operation',
+    'Test',
 ]
 
 MIDDLEWARE = [

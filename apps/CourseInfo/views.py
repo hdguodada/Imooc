@@ -23,7 +23,7 @@ class CourseView(View):
         except PageNotAnInteger:
             page = 1
 
-        p = Paginator(all_courses, 3, request=request)
+        p = Paginator(all_courses, 15, request=request)
         courses = p.page(page)
 
 
