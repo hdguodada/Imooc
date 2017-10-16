@@ -2,6 +2,9 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from .models import Organization, CityDict
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from .forms import UserAskForm
+from django.http import HttpResponse
+import json
 
 # Create your views here.
 
@@ -39,4 +42,28 @@ class OrgListView(View):
             'category': category,
             'org_num': org_num,
             'hot_org': hot_org,
+        })
+
+
+
+class UserAskView(View):
+    def post(self, request):
+        user_ask_form = UserAskForm(request.POST)
+        res = dict()
+        if user_ask_form.is_valid():
+            user_ask_form.save(commit=True)
+            res['status'] = 'success'
+            return HttpResponse(json.dumps(res), content_type='application/json')
+        else:
+            res['status'] = 'fail'
+            res['msg'] = 'wrong'
+            return HttpResponse(json.dumps(res), content_type='application/json')
+
+
+# org_detail
+class OrgDetailView(View):
+    def get(self, request, org_id):
+        org = Organization.objects.get(id=org_id)
+        return render(request, 'org-detail-homepage.html', {
+            'org': org,
         })

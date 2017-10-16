@@ -1,9 +1,21 @@
 from django.db import models
 from OrganizationInfo.models import Organization, Teacher
-from operation.models import Course_tag, Course_category
 from datetime import datetime
 
 # Create your models here.
+
+class Course_tag(models.Model):
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+
+class Course_category(models.Model):
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
 
 
 class Course(models.Model):
@@ -27,3 +39,6 @@ class Course(models.Model):
 
     def __str__(self):
         return self.name
+
+
+

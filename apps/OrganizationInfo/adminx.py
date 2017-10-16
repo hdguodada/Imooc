@@ -19,7 +19,6 @@ class CityDictAdmin:
     ]
 
 
-
 xadmin.site.register(Organization, OrganizationAdmin)
 xadmin.site.register(CityDict, CityDictAdmin)
 xadmin.site.register(Teacher, TeacherAdmin)
