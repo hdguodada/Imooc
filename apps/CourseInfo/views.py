@@ -38,8 +38,10 @@ class CourseView(View):
 class CourseDetailView(View):
     def get(self, request, course_id):
         course = Course.objects.get(id=course_id)
+        all_catogery = course.course_categories.all()
         return render(request, 'course-detail.html', {
             'course': course,
+            'all_catogery': all_catogery,
         })
 
 

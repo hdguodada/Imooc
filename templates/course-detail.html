@@ -34,7 +34,7 @@
 						<ul class="parameter">
 							<li><span class="pram word3">时&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;长：</span><span>{{ course.learn_time }}</span></li>
                             <li><span class="pram word3">章&nbsp;节&nbsp;数：</span><span>5</span></li>
-                            <li><span class="pram word3">课程类别：</span><span title="">{{ course.category.name }}</span></li>
+                            <li><span class="pram word3">课程类别：</span><span title="">{% for category in all_catogery %}{{ category.name }}{% endfor %}</span></li>
 							<li class="piclist"><span class="pram word4">学习用户：</span>
                                 
                                     <span class="pic"><img width="40" height="40" src="{{ request.user.image.url }}"/></span>
@@ -131,25 +131,6 @@
 </section>
 {% endblock %}
 <footer>
-
-		<div class="footer">
-			<div class="wp">
-				<ul class="cont">
-					<li class="logo"><a href=""><img src="/static/images/footlogo.png"/></a></li>
-					<li class="code"><img src="/static/images/code.jpg"/><p class="center">扫描关注微信</p></li>
-					<li class="third"><img class="fl" src="/static/images/tell.png"/><p class="tell">33333333</p><p class="time">周一至周日 9:00-18:00</p></li>
-				</ul>
-
-			</div>
-			<p class="line"></p>
-			<div class="wp clear">
-                <span class="fl">? 2016 www.projectsedu.com 慕学在线-在线学习交流平台 保留所有权利</span>
-                <span class="fr">copyright ? 2016 ICP备案证书号：蜀ICP备xxxxx号-1</span>
-			</div>
-		</div>
-	</footer>
-
-<section>
 {% block custom_js %}
  <script>
 //收藏分享
@@ -157,7 +138,7 @@ function add_fav(current_elem, fav_id, fav_type) {
   $.ajax({
     cache: false,
     type: "POST",
-    url: "{% url 'org:add_fav' %}",
+    url: "",
     data: {'fav_id': fav_id, 'fav_type': fav_type},
     async: true,
     beforeSend: function (xhr, settings) {
@@ -166,7 +147,7 @@ function add_fav(current_elem, fav_id, fav_type) {
     success: function (data) {
       if (data.status == 'fail') {
         if (data.msg == '用户未登录') {
-          window.location.href = "{% url 'login' %}";
+          window.location.href = "{% url 'user:login' %}";
         } else {
           current_elem.text(data.msg)
         }
