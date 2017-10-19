@@ -216,4 +216,33 @@ class OrgDetalTeacherView(View):
 
 class TearcherView(View):
     def get(self, request):
-        return render(request, 'teachers-list.html')
+        all_teachers = Teacher.objects.all()
+        all_teacher_nums = all_teachers.count()
+        hot_teachers = Teacher.objects.all().order_by('-fav_nums')[:3]
+        # fenye
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_teachers, 8, request=request)
+        teachers  = p.page(page)
+        return render(request, 'teachers-list.html', {
+            'all_teachers': teachers,
+            'all_teacher_nums': all_teacher_nums,
+            'hot_teachers': hot_teachers,
+        })
+
+
+class TeacherDetailView(View):
+    def get(self, request, teacher_id):
+        try:
+            teacher = Teacher.objects.get(id=teacher_id)
+        except Exception as e:
+            return None
+        teacher_course = teacher.course_set.all()
+
+        return render(request, 'teacher-detail.html', {
+            'teacher': teacher,
+            'teacher_course': teacher_course,
+        })

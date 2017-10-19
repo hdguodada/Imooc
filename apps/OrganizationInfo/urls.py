@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from .views import OrgListView, UserAskView, OrgDetailView, OrgDetailCourseView, AddFav
-from .views import OrgDetalDescView, OrgDetalTeacherView, TearcherView
+from .views import OrgDetalDescView, OrgDetalTeacherView, TearcherView, TeacherDetailView
 
 
 urlpatterns = [
@@ -18,4 +18,6 @@ urlpatterns = [
     url(r'org_detail_teacher/(?P<org_id>\d+)/$', OrgDetalTeacherView.as_view(), name='org_teacher'),
     # Teacher
     url(r'teacher_list/$', TearcherView.as_view(), name='teacher_list'),
+    # Teacher.list
+    url(r'teacher_detail/(?P<teacher_id>\d+)/$', TeacherDetailView.as_view(), name='teacher_detail'),
 ]
