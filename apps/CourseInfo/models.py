@@ -44,6 +44,7 @@ class Course_style(models.Model):
 
 
 
+# 课程
 class Course(models.Model):
     name = models.CharField(max_length=20, verbose_name='课程名称')
     learn_time = models.IntegerField(default=0, verbose_name='学习时长')
@@ -67,3 +68,6 @@ class Course(models.Model):
     class Meta:
         verbose_name = '课程'
         verbose_name_plural = verbose_name
+
+
+

@@ -216,9 +216,14 @@ class OrgDetalTeacherView(View):
 
 class TearcherView(View):
     def get(self, request):
+        current_page = 'teacher'
         all_teachers = Teacher.objects.all()
         all_teacher_nums = all_teachers.count()
         hot_teachers = Teacher.objects.all().order_by('-fav_nums')[:3]
+        fav_teachers = all_teachers.order_by('-fav_nums')
+        sort = request.GET.get('sort')
+        if sort == 'hot':
+            all_teachers=fav_teachers
         # fenye
         try:
             page = request.GET.get('page', 1)
@@ -231,6 +236,8 @@ class TearcherView(View):
             'all_teachers': teachers,
             'all_teacher_nums': all_teacher_nums,
             'hot_teachers': hot_teachers,
+            'current_page': current_page,
+            'sort': sort,
         })
 
 
@@ -241,8 +248,22 @@ class TeacherDetailView(View):
         except Exception as e:
             return None
         teacher_course = teacher.course_set.all()
+        has_teacher_fav = False
+        if request.user.is_authenticated():
+            if UserFavorite.objects.filter(user=request.user, fav_id=teacher.id, fav_type=3):
+                has_teacher_faved = True
+        has_org_fav = False
+        if request.user.is_authenticated():
+            if UserFavorite.objects.filter(user=request.user, fav_id=teacher.organization.id, fav_type=2):
+                has_org_faved = True
+
+
 
         return render(request, 'teacher-detail.html', {
             'teacher': teacher,
             'teacher_course': teacher_course,
+            'current_page': 'teacher',
+            'has_teacher_faved': has_teacher_faved,
+            'has_org_faved': has_org_faved,
         })
+

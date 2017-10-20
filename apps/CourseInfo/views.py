@@ -37,19 +37,17 @@ class CourseView(View):
 
 class CourseDetailView(View):
     def get(self, request, course_id):
+        current_page = 'course'
         course = Course.objects.get(id=course_id)
         all_catogery = course.course_categories.all()
         return render(request, 'course-detail.html', {
             'course': course,
             'all_catogery': all_catogery,
+            'current_page': current_page,
         })
 
 
-class TeacherView(View):
-    def get(self, request):
-        return render(request, 'teacher-list.html')
 
-
-class TeacherDetailView(View):
+class LessonView(View):
     def get(self, request):
-        return render(request, 'teacher-detail.html')
+        return render(request, ')
