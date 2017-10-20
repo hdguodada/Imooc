@@ -1,10 +1,9 @@
 from django.conf.urls import url
-from .views import CourseView, CourseDetailView, TeacherView, TeacherDetailView
+from .views import CourseView, CourseDetailView, LessonView
 
 
 urlpatterns = [
     url(r'course_list/$', CourseView.as_view(), name='course_list'),
     url(r'course_detail/(?P<course_id>.*)/$', CourseDetailView.as_view(), name='course_detail'),
-    url(r'teacher_list/$', TeacherView.as_view(), name='teacher_list'),
-    url(r'teacher_detail/$', TeacherDetailView.as_view(), name='teacher_detail'),
+    url(r'course_video/(?P<course_id>.*)/$', LessonView.as_view(), name='course_video'),
 ]

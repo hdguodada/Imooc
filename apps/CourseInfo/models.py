@@ -70,4 +70,11 @@ class Course(models.Model):
         verbose_name_plural = verbose_name
 
 
+class Lesson(models.Model):
+    name = models.CharField(max_length=50, verbose_name='章节名')
+    course = models.ForeignKey(Course, verbose_name='所属课程')
+    add_time = models.DateTimeField(auto_now=True, verbose_name='添加时间')
 
+    class Meta:
+        verbose_name = '章节信息'
+        verbose_name_plural = verbose_name
