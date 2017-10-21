@@ -51,7 +51,9 @@ class CourseDetailView(View):
 class LessonView(View):
     def get(self, request, course_id):
         course = Course.objects.get(id=course_id)
+        all_lessons = course.lesson_set.all()
         return render(request, 'course-video.html', {
             'course_id': course_id,
             'course': course,
+            'all_lessons': all_lessons,
         })

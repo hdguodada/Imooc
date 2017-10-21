@@ -89,9 +89,8 @@ def get_lesson_data():
                 for video in lesson.find_all('a'):
                     print(video)
                     video_name = video.text.strip().split('\r')[0]
-                    print(video_name)
                     video_lesson = Lesson.objects.get(name=lesson_name, course=lesson_course)
-                    print(video_lesson)
+                    video_time = video.text.strip().split('\r')[1]
                     Video.objects.get_or_create(name=video_name, lesson=video_lesson)
                     print(video_name + 'save sucess')
 

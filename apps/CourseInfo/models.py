@@ -86,7 +86,9 @@ class Lesson(models.Model):
 class Video(models.Model):
     name = models.CharField(max_length=50)
     lesson = models.ForeignKey(Lesson)
+    video_time = models.CharField(max_length=50, null=True, blank=True)
     add_time = models.DateTimeField(auto_now=True)
+
 
     def __str__(self):
         return self.name
