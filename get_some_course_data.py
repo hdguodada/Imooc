@@ -90,8 +90,10 @@ def get_lesson_data():
                     print(video)
                     video_name = video.text.strip().split('\r')[0]
                     video_lesson = Lesson.objects.get(name=lesson_name, course=lesson_course)
-                    video_time = video.text.strip().split('\r')[1]
-                    Video.objects.get_or_create(name=video_name, lesson=video_lesson)
+                    video_time = video.text.strip().split('\r')[1].strip()
+                    aa = Video.objects.get_or_create(name=video_name, lesson=video_lesson)
+                    aa[0].video_time = video_time
+                    aa[0].save()
                     print(video_name + 'save sucess')
 
             
