@@ -78,3 +78,15 @@ class Lesson(models.Model):
     class Meta:
         verbose_name = '章节信息'
         verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.name
+
+
+class Video(models.Model):
+    name = models.CharField(max_length=50)
+    lesson = models.ForeignKey(Lesson)
+    add_time = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name

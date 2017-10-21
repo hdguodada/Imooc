@@ -8,7 +8,7 @@ django.setup()
 import requests
 from bs4 import BeautifulSoup
 
-from CourseInfo.models import Course, Course_tag, Course_category, Course_style
+from CourseInfo.models import Course, Course_tag, Course_category, Course_style, Lesson, Video
 
 from urllib.parse import urljoin
 
@@ -75,5 +75,28 @@ def get_course_list():
 
 
 
+def get_lesson_data():
+    all_courses = Course.objects.all()
+    for course in all_courses:
+        if course.detail.startswith('http'):
+            res = requests.get(course.detail)
+            soup = BeautifulSoup(res.text, 'lxml')
+            for lesson in soup.select('.chapter'):
+                lesson_name = lesson.strong.text.strip().split('\r')[0]
+                lesson_course = course
+                Lesson.objects.get_or_create(name=lesson_name, course=lesson_course)
+                print(lesson_name + 'save sucess')
+                for video in lesson.find_all('a'):
+                    print(video)
+                    video_name = video.text.strip().split('\r')[0]
+                    print(video_name)
+                    video_lesson = Lesson.objects.get(name=lesson_name, course=lesson_course)
+                    print(video_lesson)
+                    Video.objects.get_or_create(name=video_name, lesson=video_lesson)
+                    print(video_name + 'save sucess')
+
+            
+
+
 if __name__ == '__main__':
-    get_course_list()
+    get_lesson_data()
