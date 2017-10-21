@@ -248,11 +248,11 @@ class TeacherDetailView(View):
         except Exception as e:
             return None
         teacher_course = teacher.course_set.all()
-        has_teacher_fav = False
+        has_teacher_faved = False
         if request.user.is_authenticated():
             if UserFavorite.objects.filter(user=request.user, fav_id=teacher.id, fav_type=3):
                 has_teacher_faved = True
-        has_org_fav = False
+        has_org_faved = False
         if request.user.is_authenticated():
             if UserFavorite.objects.filter(user=request.user, fav_id=teacher.organization.id, fav_type=2):
                 has_org_faved = True

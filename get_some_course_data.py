@@ -81,15 +81,20 @@ def get_lesson_data():
         if course.detail.startswith('http'):
             res = requests.get(course.detail)
             soup = BeautifulSoup(res.text, 'lxml')
+            course.you_need_know = soup.find_all('dd')[0].text
+            course.teacher_tell_you = soup.find_all('dd')[0].text
+            course.save()
             for lesson in soup.select('.chapter'):
+                # 章节名
                 lesson_name = lesson.strong.text.strip().split('\r')[0]
+                # 所属课程
                 lesson_course = course
                 Lesson.objects.get_or_create(name=lesson_name, course=lesson_course)
                 print(lesson_name + 'save sucess')
                 for video in lesson.find_all('a'):
-                    print(video)
                     video_name = video.text.strip().split('\r')[0]
                     video_lesson = Lesson.objects.get(name=lesson_name, course=lesson_course)
+                    # 每节时长
                     video_time = video.text.strip().split('\r')[1].strip()
                     aa = Video.objects.get_or_create(name=video_name, lesson=video_lesson)
                     aa[0].video_time = video_time
