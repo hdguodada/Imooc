@@ -82,8 +82,19 @@ class LessonView(LoginRequiredMixin, View):
         course = Course.objects.get(id=course_id)
         course.learn_num += 1
         all_lessons = course.lesson_set.all()
+        course_resource = course.courseresource_set.all()
         return render(request, 'course-video.html', {
             'course_id': course_id,
             'course': course,
             'all_lessons': all_lessons,
+            'course_resource': course_resource,
+        })
+
+
+class CourseCommentsView(LoginRequiredMixin, View):
+    login_url = 'user:login'
+    def get(self, request, course_id):
+        course = Course.objects.get(id=int(course_id))
+        return render(request, 'course-comment.html', {
+            'course': course,   
         })

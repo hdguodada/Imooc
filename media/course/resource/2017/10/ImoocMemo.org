@@ -1,0 +1,103 @@
+* Imooc
+** UserInfo
+*** longin(request, user)
+the login method need two arrtibute. first is request, two is user.
+*** email authenticate
+    SCHEDULED: <2017-10-08 日>
+#+BEGIN_SRC python
+  from django.contrib.auth.backends import ModelBackend
+  from .models import UserProfile
+  from django.db.models import Q
+
+
+  class CustomBackend(ModelBackend):
+      def authenticate(self, username=None, password=None, **kwargs):
+          try:
+              user = UserProfile.objects.get(Q(username=usernmae)|Q(email=username))
+              if user.check_password(password):
+                  return user
+          except Exception as e:
+              return None
+
+  # settings.py
+  AUTHTICATION_BACKEND = ['UserInfo.views.CustomBackend', ]
+#+END_SRC
+*** captcha
+pip install django-simple-captcha
+
+# settings.py
+# install
+'captcha'
+
+# forms.py
+from captcha.fields import CaptchaField
+
+
+class RegisterForm(forms.Form):
+    email = forms.EmailField(required=True)
+    password = forms.CharField(required=True, min_length=6)
+    captcha = CaptchaField(error_messages={'invalid': '验证码错误'})
+
+# views
+from .models import RegisterForm
+
+class  RegisterView(View):
+    register_form = RegisterForm()
+    return render(request, 'register.html', {
+        'register_form': register_form,
+})
+# html
+{{ register_form.captcha }}
+*** send_email
+# settins.py
+EMAIL_HOST = 'smtp.sina.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = '18358928574@sina.cn'
+EMAIL_HOST_PASSWORD = 'yumo20160628'
+EMAIL_USE_TLS = True
+EMAIL_FROM = '18358928574@sina.cn'
+# send_email.py
+from django.core.mail import send_mail
+email_title = ''
+email_body = ''
+email_status = send_mail(email_title, email_body, EMAIL_FROM, [email])
+*** media
+1. Imooc/urls.py
+from django.views.static import serve
+from Imooc.settins import MEDIA_ROOT
+
+urlpatterns = [
+    # media url
+    url(r'media/(?P<path>.*)$', serve, {'document_root':MEDIA_ROOT}),
+]
+
+
+2. settings.py
+
+MEDIA_URL = '/media/'
+# 文件上传路径
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+3. html
+{{ request.user.url }}
+** organizationinfo
+*** get foreinkey nums
+def get_teacher_nums(self):
+    return self.teacher_set.all().count()
+
+*** Stringformat
+{{ city.id|stringformat:'i' %}
+** xadmin
+*** 侧边栏中文化
+在应用里的apps.py中 添加 verbose_name
+#+BEGIN_SRC python
+from django.apps import AppConfig
+
+
+class CourseinfoConfig(AppConfig):
+    name = 'CourseInfo'
+    verbose_name = '课程信息'
+#+END_SRC
+
+在同级目录下的__init__.py中导入配置
+default_app_config = 'CourseInfo.apps.CourseinfoConfig'

@@ -46,7 +46,7 @@ class Course_style(models.Model):
 
 # 课程
 class Course(models.Model):
-    name = models.CharField(max_length=20, verbose_name='课程名称')
+    name = models.CharField(max_length=50, verbose_name='课程名称')
     learn_time = models.IntegerField(default=0, verbose_name='学习时长')
     image = models.ImageField(null=True, blank=True, upload_to='course_image/%Y/%m', verbose_name='课程封面图')
     learn_num = models.IntegerField(default=0, verbose_name='学习人数')
@@ -92,3 +92,14 @@ class Video(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class CourseResource(models.Model):
+    name = models.CharField(max_length=50)
+    course = models.ForeignKey(Course)
+    download = models.FileField(upload_to='course/resource/%Y/%m')
+    add_time = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
