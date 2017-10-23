@@ -189,7 +189,7 @@ $('#js-pl-submit').on('click', function () {
     $.ajax({
         cache: false,
         type: "POST",
-        url: "",
+        url: "{% url 'course:add_comment' %}",
         data: {course_id: {{ course.id }}, comments: comments},
         async: true,
         beforeSend: function (xhr, settings) {

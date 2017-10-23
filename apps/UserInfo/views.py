@@ -3,7 +3,6 @@ from django.views.generic.base import View
 
 from .forms import LoginForm, RegisterForm, ForgetPasswordForm, ModifyPasswordForm, ImageForm
 from .forms import UserInfoForm
-
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.backends import ModelBackend
@@ -14,6 +13,8 @@ from util.send_email import send_register_email
 import datetime
 from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
+from operation.models import UserCourse, UserFavorite
+from CourseInfo.models import Course
 import json
 
 # Create your views here.
@@ -185,7 +186,10 @@ class ModifyPwd(View):
 class UserInfoView(LoginRequiredMixin, View):
     login_url = 'user:login'
     def get(self, request):
-        return render(request, 'usercenter-info.html')
+        current_page = 'userinfo'
+        return render(request, 'usercenter-info.html', {
+            'current_page': current_page,
+        })
 
     def post(self, request):
         print('1')
@@ -203,7 +207,7 @@ class UserInfoView(LoginRequiredMixin, View):
                 print(v)
         return HttpResponse(json.dumps(res), content_type='application/json')
 
-        
+
 
 
 
@@ -289,5 +293,28 @@ class UpdateEmailView(View):
 
 
 
+class MyCousreView(View):
+    def get(self, request):
+        current_page = 'mycourse'
+        user_course = UserCourse.objects.filter(user=request.user)
+        course_ids = [course.course.id for course in user_course]
+        all_courses = Course.objects.filter(id__in=course_ids)
+
+        return render(request, 'usercenter-mycourse.html', {
+            'all_courses': all_courses,
+            'current_page': current_page,
+        })
+
+
+class MyFavView(View):
+    def get(self, request):
+        current_page = 'myfav'
+        user = request.user
+        course_fav = UserFavorite.objects.filter(user=user, fav_type=1)
+        fav_ids = [course.fav_id for course in course_fav]
+        fav_courses = Course.objects.filter(id__in=fav_ids)
+        return render(request, 'usercenter-fav-course.html',{
+            'fav_courses': fav_courses,
+        })
 
 

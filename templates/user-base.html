@@ -122,9 +122,9 @@
   <div class="wp list personal_list">
     <div class="left">
       <ul>
-        <li class="active2"><a href="{% url 'user:usercenter' %}">个人资料</a></li>
-        <li><a href="">我的课程</a></li>
-        <li><a href="">我的收藏</a></li>
+          <li class={% if current_page == 'userinfo' %}"active2"{% endif %}><a href="{% url 'user:usercenter' %}">个人资料</a></li>
+          <li class={% if current_page == 'mycourse' %}"active2"{% endif %}><a href="{% url 'user:my_course' %}">我的课程</a></li>
+          <li><a href="{% url 'user:my_fav' %}">我的收藏</a></li>
         <li>
           <a href="" style="position: relative;">
             我的消息

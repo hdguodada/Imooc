@@ -2,9 +2,13 @@ from django.shortcuts import render
 from django.views.generic.base import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from django.db.models import Q
+from django.http import HttpResponse
+
 from .models import Course
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
-from operation.models import UserFavorite
+from operation.models import UserFavorite, UserCourse, CourseComments
+import json
 
 from random import choice
 
@@ -80,7 +84,20 @@ class LessonView(LoginRequiredMixin, View):
     login_url = 'user:login'
     def get(self, request, course_id):
         course = Course.objects.get(id=course_id)
+        # 课程学习人数+1
         course.learn_num += 1
+        # 添加到用户课程
+        user_courses = UserCourse.objects.filter(user=request.user, course=course)
+        if not user_courses:
+            user_courses = UserCourse(user=request.user, course=course)
+            user_courses.save()
+        # 相关课程
+        user_courses = UserCourse.objects.filter(course=course)
+        user_ids = [user_course.id for user_course in user_courses]
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
+        course_ids = [usercourse.course.id for usercourse in all_user_courses]
+        relate_courses = Course.objects.filter(Q(id__in=course_ids)&~Q(id=int(course_id))).order_by('-click_num')[:5]
+
         all_lessons = course.lesson_set.all()
         course_resource = course.courseresource_set.all()
         return render(request, 'course-video.html', {
@@ -88,6 +105,7 @@ class LessonView(LoginRequiredMixin, View):
             'course': course,
             'all_lessons': all_lessons,
             'course_resource': course_resource,
+            'relate_courses': relate_courses,
         })
 
 
@@ -95,6 +113,41 @@ class CourseCommentsView(LoginRequiredMixin, View):
     login_url = 'user:login'
     def get(self, request, course_id):
         course = Course.objects.get(id=int(course_id))
+        # 相关课程
+        user_courses = UserCourse.objects.filter(course=course)
+        user_ids = [user_course.id for user_course in user_courses]
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
+        course_ids = [usercourse.course.id for usercourse in all_user_courses]
+        relate_courses = Course.objects.filter(Q(id__in=course_ids)&~Q(id=int(course_id))).order_by('-click_num')[:5]
+        course_comments = CourseComments.objects.all()
+
         return render(request, 'course-comment.html', {
-            'course': course,   
+            'course': course,
+            'relate_courses': relate_courses,
+            'course_comments': course_comments,
         })
+
+
+class AddComments(LoginRequiredMixin, View):
+    login_url = 'user:login'
+    def post(self, request):
+        res= dict()
+        user = request.user
+        course_id = request.POST.get('course_id')
+        comments = request.POST.get('comments')
+        if course_id and comments:
+            course = Course.objects.get(id=int(course_id))
+            user = request.user
+            course_comment = CourseComments()
+            course_comment.user = user
+            course_comment.course = course
+            course_comment.comments = comments
+            course_comment.save()
+            res['status'] = 'success'
+            res['msg'] = '评论成功'
+        else:
+            res['status'] = 'fail'
+            res['msg'] = '添加失败'
+
+        return HttpResponse(json.dumps(res), content_type='application/json')
+

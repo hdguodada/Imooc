@@ -101,14 +101,15 @@
 </section>
 <!--crumbs start-->
 
+    {% block custom_crumbs %}
     <section>
         <div class="wp">
             <ul  class="crumbs">
-                <li><a href="{% url 'index' %}">首页</a>></li>
-                {% block custom_crumbs %}{% endblock %}
+                <li><a href="{% url 'index' %}">首页</a></li>
             </ul>
         </div>
     </section>
+    {% endblock %}
 
 
 {% block content %}
