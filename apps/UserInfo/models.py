@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import AbstractUser
+from django.db.models import Q
 # Create your models here.
 
 
@@ -21,7 +22,7 @@ class UserProfile(AbstractUser):
 
     def get_unread_nums(self):
         from operation.models import UserMessage
-        return UserMessage.objects.filter(user=self.id, has_read=False).count()
+        return UserMessage.objects.filter(Q(user=self.id)|Q(user=0), has_read=False).count()
 
 
 

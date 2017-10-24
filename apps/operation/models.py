@@ -25,7 +25,6 @@ class CourseComments(models.Model):
     comments = models.TextField()
     add_time = models.DateTimeField(default=datetime.now)
 
-
     def __str__(self):
         return self.user.username
 
@@ -59,4 +58,4 @@ class UserMessage(models.Model):
 
 
     def __str__(self):
-        return self.user.username
+        return self.message

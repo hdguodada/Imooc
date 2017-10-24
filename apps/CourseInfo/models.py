@@ -66,6 +66,19 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
+    # 获得章节数
+    def get_zj_num(self):
+        return self.lesson_set.all().count()
+    get_zj_num.short_description =  '章节数'
+
+    # 跳转
+    def go_to(self):
+        from django.utils import six
+        from django.utils.functional import lazy
+        from django.utils.safestring import mark_safe
+        return mark_safe('<a href="www.baidu.com">百度</a>')
+    go_to.short_description = '跳转到百度'
+
     class Meta:
         verbose_name = '课程'
         verbose_name_plural = verbose_name

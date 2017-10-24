@@ -19,6 +19,7 @@ from UserInfo.views import IndexView
 from django.views.static import serve
 from Imooc.settings import MEDIA_ROOT
 import xadmin
+from django.conf import settings
 
 urlpatterns = [
     url(r'^admin/', xadmin.site.urls),
@@ -36,3 +37,16 @@ urlpatterns = [
     url(r'^org/', include('OrganizationInfo.urls', namespace='org')),
 
 ]
+
+# 全局404与500
+handler404 = 'user.views.page_not_found'
+handler500 = 'user.views.page_error'
+
+
+if settings.DEBUG:
+    pass
+else:
+    # 项目部署上线时使用
+    from imooc.settings import STATIC_ROOT
+    # 配置静态文件访问处理
+    urlpatterns.append(url(r'^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT}))

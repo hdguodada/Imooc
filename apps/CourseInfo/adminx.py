@@ -14,9 +14,14 @@ class CourseResourceInline:
 
 
 class CourseAdmin:
-    list_display = ['name', 'organization']
+    list_display = ['name', 'organization', 'get_zj_num', 'go_to']
     inlines = [LessonInline, CourseResourceInline]
+    ordering = ['-click_num']
+    # 只读
     readonly_fields = ['click_num']
+    # 隐藏某些字段
+    # exclude = ['']
+    refresh_times = [3, 5]
 
     def queryset(self):
         qs = super(CourseAdmin, self).queryset()

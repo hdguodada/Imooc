@@ -6,11 +6,10 @@ from .forms import UserInfoForm
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.backends import ModelBackend
-from .models import UserProfile, EmailVerifyRecord
+from .models import UserProfile, EmailVerifyRecord, Banner
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password
 from util.send_email import send_register_email
-import datetime
 from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
 from operation.models import UserCourse, UserFavorite, UserMessage
@@ -34,10 +33,15 @@ class CustomBackend(ModelBackend):
 class IndexView(View):
     def get(self, request):
         banner_course = BannerCourse.objects.all()[:5]
+        all_course = Course.objects.filter(is_banner=False)[:6]
+        banner = Banner.objects.all().order_by('index')[:5]
+        all_orgs = Organization.objects.all().order_by('-fav_nums')[:15]
         return render(request, 'index.html', {
             'banner_course': banner_course,
+            'all_course': all_course,
+            'banner': banner,
+            'all_orgs': all_orgs,
         })
-
 
 
 class LoginView(View):
@@ -119,7 +123,6 @@ class ActiveView(View):
                 user.save()
                 return render(request, 'login.html')
             return render(request, 'active_fail.html')
-
 
 
 # forget password
@@ -212,9 +215,6 @@ class UserInfoView(LoginRequiredMixin, View):
         return HttpResponse(json.dumps(res), content_type='application/json')
 
 
-
-
-
 # 个人头像
 class ImageUploadView(View):
     def post(self, request):
@@ -266,7 +266,6 @@ class SendEmailCodeView(View):
         res['status'] = 'success'
         res['msg'] = 'send success'
         return HttpResponse(json.dumps(res), content_type='application/json')
-
 
 
 # modify email in userinfo
@@ -347,10 +346,26 @@ class MyMessage(LoginRequiredMixin, View):
     login_url = 'user:login'
     def get(self, request):
         user = request.user
-        user_message = UserMessage.objects.filter(user=user.id)
+        user_message = UserMessage.objects.filter(Q(user=user.id)|Q(user=0))
+        for message in user_message:
+            message.has_read = True
+            message.save()
         return render(request, 'usercenter-message.html', {
             'user_message': user_message,
         })
 
 
+# 全局404
+def page_not_found(request):
+    from django.shortcuts import render_to_response
+    response = render_to_response('404.html', {})
+    response.status = 404
+    return response
 
+
+# 全局404
+def page_error(request):
+    from django.shortcuts import render_to_response
+    response = render_to_response('500.html', {})
+    response.status = 500
+    return response

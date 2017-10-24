@@ -101,3 +101,62 @@ class CourseinfoConfig(AppConfig):
 
 在同级目录下的__init__.py中导入配置
 default_app_config = 'CourseInfo.apps.CourseinfoConfig'
+*** Inline
+再添加课程时同时可以添加章节，只支持一级潜逃
+class LessonInline:
+    model= Lesson
+    extra = 0
+
+class CourseResourceInline:
+    model = CourseResource
+    extra = 0
+
+class CourseAdmin:
+    list_display = ['name', 'organization']
+    inlines = [LessonInline, CourseResourceInline]
+    ordering = ['-click_num']
+    # 只读
+    readonly_fields = ['click_num']
+    # 隐藏某些字段
+    # exclude = ['']
+
+    def queryset(self):
+        qs = super(CourseAdmin, self).queryset()
+        qs = qs.filter(is_banner=False)
+        return qs
+*** 排序
+ordering = ['']
+*** 只读与隐藏
+readonly_fields = ['']
+exclude = ['']
+
+*** models_icon 
+如果你要替换xadmin里的icon, 可以百度搜索font icon ， 开源项目，通过里面的class更改侧边栏的图标样式。
+*** 在同一个model里用两个管理器管理
+ex: Course 与 BannerCourse
+同样注册完后，两个管理器里的数据是一样的，接下来要筛选出他们的各自的数据
+重载queryset()方法。
+def queryset(self):
+    qs = super(CourseAdmin, self).queryset()
+    qs = qs.filter(is_banner=False)
+    return qs
+*** xadmin 其他常见功能
+**** 在列表页直接修改某些字段
+list_editable = ['','']
+**** models中定义的函数可以直接添加到adminx的list_display里。
+     ex: 
+    list_display = ['name', 'organization', 'get_zj_num', 'go_to']
+    # 获得章节数
+    def get_zj_num(self):
+        return self.lesson_set.all().count()
+    get_zj_num.short_description =  '章节数'
+
+    # 跳转
+    def go_to(self):
+        from django.utils import six
+        from django.utils.functional import lazy
+        from django.utils.safestring import mark_safe
+        return mark_safe('<a href="www.baidu.com">百度</a>')
+    go_to.short_description = '跳转到百度'
+**** 页面内的自动刷新
+refresh_times = [3,5] 3秒或者5秒刷新页面，页面内可以选择
