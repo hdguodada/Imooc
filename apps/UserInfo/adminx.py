@@ -1,7 +1,7 @@
 import xadmin
 from xadmin import views
 from xadmin.plugins.auth import UserAdmin
-from .models import EmailVerifyRecord, UserProfile, UserMessage
+from .models import EmailVerifyRecord, UserProfile, Banner
 
 
 # adminx global setting
@@ -22,12 +22,11 @@ class EmailVerifyRecordAdmin:
     list_filter = ['code', 'email', 'send_type', 'send_time']
 
 
-class UserMessageAdmin:
-    list_display = [
-        'user', 'has_read', 'add_time'
-    ]
+class BannerAdmin:
+    list_display = ['title']
+
+
 
 xadmin.site.register(EmailVerifyRecord, EmailVerifyRecordAdmin)
-xadmin.site.register(UserMessage, UserMessageAdmin)
 xadmin.site.register(views.BaseAdminView, BaseSetting)
 xadmin.site.register(views.CommAdminView, GlobalSettings)

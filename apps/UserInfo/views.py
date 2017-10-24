@@ -6,15 +6,16 @@ from .forms import UserInfoForm
 from django.contrib.auth import login, logout, authenticate
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.backends import ModelBackend
-from .models import UserProfile, UserMessage, EmailVerifyRecord
+from .models import UserProfile, EmailVerifyRecord
 from django.db.models import Q
 from django.contrib.auth.hashers import make_password
 from util.send_email import send_register_email
 import datetime
 from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin
-from operation.models import UserCourse, UserFavorite
-from CourseInfo.models import Course
+from operation.models import UserCourse, UserFavorite, UserMessage
+from CourseInfo.models import Course, BannerCourse
+from OrganizationInfo.models import Organization, Teacher
 import json
 
 # Create your views here.
@@ -32,7 +33,10 @@ class CustomBackend(ModelBackend):
 
 class IndexView(View):
     def get(self, request):
-        return render(request, 'index.html')
+        banner_course = BannerCourse.objects.all()[:5]
+        return render(request, 'index.html', {
+            'banner_course': banner_course,
+        })
 
 
 
@@ -306,9 +310,8 @@ class MyCousreView(View):
         })
 
 
-class MyFavView(View):
+class MyFavCourseView(View):
     def get(self, request):
-        current_page = 'myfav'
         user = request.user
         course_fav = UserFavorite.objects.filter(user=user, fav_type=1)
         fav_ids = [course.fav_id for course in course_fav]
@@ -316,5 +319,38 @@ class MyFavView(View):
         return render(request, 'usercenter-fav-course.html',{
             'fav_courses': fav_courses,
         })
+
+
+class MyFavOrgView(View):
+    def get(self, request):
+        user = request.user
+        org_fav = UserFavorite.objects.filter(user=user, fav_type=2)
+        fav_ids = [org.fav_id for org in org_fav]
+        fav_orgs = Organization.objects.filter(id__in=fav_ids)
+        return render(request, 'usercenter-fav-org.html', {
+            'fav_orgs': fav_orgs,
+        })
+
+
+class MyFavTeacherView(View):
+    def get(self, request):
+        user = request.user
+        teacher_fav = UserFavorite.objects.filter(user=request.user, fav_type=3)
+        fav_ids = [teacher.fav_id for teacher in teacher_fav]
+        fav_teachers = Teacher.objects.filter(id__in=fav_ids)
+        return render(request, 'usercenter-fav-teacher.html', {
+            'fav_teachers': fav_teachers,
+        })
+
+
+class MyMessage(LoginRequiredMixin, View):
+    login_url = 'user:login'
+    def get(self, request):
+        user = request.user
+        user_message = UserMessage.objects.filter(user=user.id)
+        return render(request, 'usercenter-message.html', {
+            'user_message': user_message,
+        })
+
 
 

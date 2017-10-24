@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from .views import LoginView, LogoutView, RegisterView, ActiveView, ForgetPasswordView, ResetPassword
 from .views import ModifyPwd, UserInfoView, ImageUploadView, SendEmailCodeView, UpdateEmailView, MyCousreView
-from .views import MyFavView
+from .views import MyFavCourseView, MyMessage, MyFavOrgView, MyFavTeacherView
 
 urlpatterns = [
     # login
@@ -28,6 +28,12 @@ urlpatterns = [
     url('update_email/$', UpdateEmailView.as_view(), name='update_email'),
     # mycourse
     url('my_course/$', MyCousreView.as_view(), name='my_course'),
-    # myfav
-    url('my_fav/$', MyFavView.as_view(), name='my_fav'),
+    # myfavcourse
+    url('my_fav/$', MyFavCourseView.as_view(), name='my_fav'),
+    # myfavorg
+    url('my_fav_org/$', MyFavOrgView.as_view(), name='my_fav_org'),
+    # myfavteacher
+    url('my_fav_teacher/$', MyFavTeacherView.as_view(), name='my_fav_teacher'),
+    # mymessage
+    url('my_message/$', MyMessage.as_view(), name='my_message'),
 ]

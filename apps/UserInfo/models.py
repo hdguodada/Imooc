@@ -19,18 +19,10 @@ class UserProfile(AbstractUser):
     def __str__(self):
         return self.username
 
+    def get_unread_nums(self):
+        from operation.models import UserMessage
+        return UserMessage.objects.filter(user=self.id, has_read=False).count()
 
-class UserMessage(models.Model):
-    user = models.ForeignKey(UserProfile)
-    message = models.CharField(max_length=500, verbose_name='message')
-    has_read = models.BooleanField(default=False)
-    add_time = models.DateTimeField(default=datetime.now)
-
-    class Meta:
-        verbose_name_plural = 'usermessage'
-        pass
-    def __str__(self):
-        return self.message
 
 
 class EmailVerifyRecord(models.Model):
@@ -45,3 +37,20 @@ class EmailVerifyRecord(models.Model):
 
     def __str__(self):
         return self.send_type
+
+
+class Banner(models.Model):
+    title = models.CharField(max_length=100, verbose_name='标题', null=True, blank=True)
+    image = models.ImageField(upload_to='banner/%Y/%m', max_length=100, verbose_name='轮播图', null=True, blank=True)
+    url = models.URLField(max_length=200, verbose_name='访问地址', null=True, blank=True)
+    index = models.IntegerField(default=100, verbose_name='顺序')
+    add_time = models.DateField(default=datetime.now, verbose_name='添加时间', null=True, blank=True)
+
+    class Meta:
+        verbose_name = '轮播图'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.title
+
+

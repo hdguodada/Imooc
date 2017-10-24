@@ -122,14 +122,16 @@
   <div class="wp list personal_list">
     <div class="left">
       <ul>
-          <li class={% if current_page == 'userinfo' %}"active2"{% endif %}><a href="{% url 'user:usercenter' %}">个人资料</a></li>
-          <li class={% if current_page == 'mycourse' %}"active2"{% endif %}><a href="{% url 'user:my_course' %}">我的课程</a></li>
+          {% block active2 %}
+          <li class="active2"><a href="{% url 'user:usercenter' %}">个人资料</a></li>
+          <li><a href="{% url 'user:my_course' %}">我的课程</a></li>
           <li><a href="{% url 'user:my_fav' %}">我的收藏</a></li>
         <li>
-          <a href="" style="position: relative;">
+            <a href="{% url 'user:my_message' %}" style="position: relative;">
             我的消息
           </a>
         </li>
+        {% endblock %}
       </ul>
     </div>
 
@@ -138,7 +140,7 @@
       <div class="dialog" id="jsDialog">
           <div class="successbox dialogbox" id="jsSuccessTips">
               <h1>成功提交</h1>
-              <div class="close jsCloseDialog"><img src="../images/dig_close.png"/></div>
+              <div class="close jsCloseDialog"><img src="/static/images/dig_close.png"/></div>
               <div class="cont">
                   <h2>您的需求提交成功！</h2>
                   <p></p>

@@ -59,6 +59,7 @@ class Course(models.Model):
     teacher_tell_you = models.TextField(null=True, blank=True, verbose_name='讲师通知')
     degree= models.CharField(choices=(('1', '初级'), ('2', '中级'), ('3', '高级')), max_length=10, default='1', verbose_name='课程难度')
     add_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
+    is_banner = models.BooleanField(default=False)
     teacher = models.ForeignKey(Teacher, blank=True, null=True, verbose_name='所属讲师')
 
 
@@ -68,6 +69,11 @@ class Course(models.Model):
     class Meta:
         verbose_name = '课程'
         verbose_name_plural = verbose_name
+
+class BannerCourse(Course):
+    class Meta:
+        verbose_name = 'banner_course'
+        proxy=True
 
 
 class Lesson(models.Model):

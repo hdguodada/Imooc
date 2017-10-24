@@ -151,3 +151,6 @@ class AddComments(LoginRequiredMixin, View):
 
         return HttpResponse(json.dumps(res), content_type='application/json')
 
+
+
+
