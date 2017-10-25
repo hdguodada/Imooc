@@ -22,6 +22,8 @@ class CourseAdmin:
     # 隐藏某些字段
     # exclude = ['']
     refresh_times = [3, 5]
+    # 字段的特定样式
+    style_fields = {"detail":"ueditor"}
 
     def queryset(self):
         qs = super(CourseAdmin, self).queryset()

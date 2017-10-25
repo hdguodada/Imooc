@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'pure_pagination',
     'operation',
     'Test',
+    'DjangoUeditor',
 ]
 
 MIDDLEWARE = [

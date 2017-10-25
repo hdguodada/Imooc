@@ -1,7 +1,7 @@
 from django.db import models
 from OrganizationInfo.models import Organization, Teacher
 from datetime import datetime
-
+from DjangoUeditor.models import UEditorField
 # Create your models here.
 
 # 课程方向
@@ -54,7 +54,7 @@ class Course(models.Model):
     organization = models.ForeignKey(Organization, null=True, blank=True, verbose_name='所属机构')
     click_num = models.IntegerField(default=0, verbose_name='点击数')
     desc = models.CharField(max_length=200, null=True, blank=True, verbose_name='课程简介')
-    detail = models.TextField(null=True, blank=True, verbose_name='课程详情')
+    detail = UEditorField(verbose_name='课程详情', width=600, height=300, imagePath='course/ueditor', filePath='course/ueditor', default='')
     you_need_know = models.TextField(null=True, blank=True, verbose_name='课程须知')
     teacher_tell_you = models.TextField(null=True, blank=True, verbose_name='讲师通知')
     degree= models.CharField(choices=(('1', '初级'), ('2', '中级'), ('3', '高级')), max_length=10, default='1', verbose_name='课程难度')
