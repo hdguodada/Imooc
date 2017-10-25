@@ -47,6 +47,6 @@ if settings.DEBUG:
     pass
 else:
     # 项目部署上线时使用
-    from imooc.settings import STATIC_ROOT
+    from Imooc.settings import STATIC_ROOT
     # 配置静态文件访问处理
     urlpatterns.append(url(r'^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT}))
