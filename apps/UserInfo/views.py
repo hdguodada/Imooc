@@ -1,21 +1,23 @@
+import json
+
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth.hashers import make_password
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, reverse
+from django.utils import timezone
 from django.views.generic.base import View
 
-from .forms import LoginForm, RegisterForm, ForgetPasswordForm, ModifyPasswordForm, ImageForm
-from .forms import UserInfoForm
-from django.contrib.auth import login, logout, authenticate
-from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth.backends import ModelBackend
-from .models import UserProfile, EmailVerifyRecord, Banner
-from django.db.models import Q
-from django.contrib.auth.hashers import make_password
-from util.send_email import send_register_email
-from django.utils import timezone
-from django.contrib.auth.mixins import LoginRequiredMixin
+from CourseInfo.models import BannerCourse, Course
 from operation.models import UserCourse, UserFavorite, UserMessage
-from CourseInfo.models import Course, BannerCourse
 from OrganizationInfo.models import Organization, Teacher
-import json
+from util.send_email import send_register_email
+
+from .forms import (ForgetPasswordForm, ImageForm, LoginForm,
+                    ModifyPasswordForm, RegisterForm, UserInfoForm)
+from .models import Banner, EmailVerifyRecord, UserProfile
 
 # Create your views here.
 
@@ -369,3 +371,4 @@ def page_error(request):
     response = render_to_response('500.html', {})
     response.status = 500
     return response
+

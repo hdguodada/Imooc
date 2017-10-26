@@ -25,32 +25,4 @@
         </div>
     </div>
   {% endfor %}
-  </div>
-</div>
-<div class="right companycenter layout" >
-  <div class="head">
-    <h1>机构教师</h1>
-    <a class="green fr more" href="org-detail-teachers.html">查看更多  >  </a>
-  </div>
-  {% for teacher, course in teacher_and_first_course.items %}
-  <div class="diarys">
-      <div class="module5 share company-diary-box" style="padding:10px 0;">
-          <div class="left">
-              <img class="pic" src="{{ MEADIA_URL }}{{ teacher.image }}"/>
-              <p>{{ teacher.name }}</p>
-          </div>
-          <div class="right">
-              <div class="top">
-                  <div class="fl">
-                      <a href=""><h1>{{ course.name }}</h1></a>
-                      <span>发表于：{{ course.add_time }}</span>
-                  </div>
-              </div>
-            <div class="middle" style="border-bottom:0;">{{ course.desc }}</div>
-          </div>
-      </div>
-  </div>
-  {% endfor %}
-
-</div>
 {% endblock %}

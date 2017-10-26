@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '&8i)dtz3**&5h#1q6+9_npa4#(5^so=z_%8k#asfg!@oo^g)84'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG =  False
 
 ALLOWED_HOSTS = ['*']
 
@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'Imooc.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-if DEBUG:
+if not DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -171,4 +171,5 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 
 # 部署相关
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+if not DEBUG:
+    STATIC_ROOT = os.path.join(BASE_DIR, "static/")

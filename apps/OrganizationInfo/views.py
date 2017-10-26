@@ -1,16 +1,15 @@
-from django.shortcuts import render
-from django.views.generic.base import View
-
-from .models import Organization, CityDict, Teacher
-from CourseInfo.models import Course
-
-from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
-from .forms import UserAskForm
-from django.http import HttpResponse
-from operation.models import UserFavorite
 import json
 
-from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.views.generic.base import View
+from pure_pagination import EmptyPage, PageNotAnInteger, Paginator
+
+from CourseInfo.models import Course
+from operation.models import UserFavorite
+
+from .forms import UserAskForm
+from .models import CityDict, Organization, Teacher
 
 # Create your views here.
 
@@ -134,8 +133,9 @@ class OrgDetailView(View):
             teacher_and_first_course[i] = i.course_set.all().order_by('-add_time')[0]
         # 验证是否已收藏
         has_fav = False
-        if UserFavorite.objects.filter(user=request.user, fav_type=2, fav_id=org_id):
-            has_fav = True
+        if request.user.is_authenticated():
+            if UserFavorite.objects.filter(user=request.user, fav_type=2, fav_id=org_id):
+                has_fav = True
 
         return render(request, 'org-detail-homepage.html', {
             'org': org,
@@ -157,8 +157,9 @@ class OrgDetailCourseView(View):
 
         # 验证是否已收藏
         has_fav = False
-        if UserFavorite.objects.filter(user=request.user, fav_type=2, fav_id=org_id):
-            has_fav = True
+        if request.user.is_authenticated():
+            if UserFavorite.objects.filter(user=request.user, fav_type=2, fav_id=org_id):
+                has_fav = True
 
         # fenye
         try:
@@ -184,8 +185,9 @@ class OrgDetalDescView(View):
         org = Organization.objects.get(id=org_id)
         # 验证是否已收藏
         has_fav = False
-        if UserFavorite.objects.filter(user=request.user, fav_type=2, fav_id=org_id):
-            has_fav = True
+        if request.user.is_authenticated():
+            if UserFavorite.objects.filter(user=request.user, fav_type=2, fav_id=org_id):
+                has_fav = True
         return render(request, 'org-detail-desc.html', {
             'org_id': org_id,
             'org': org,
@@ -202,8 +204,9 @@ class OrgDetalTeacherView(View):
         all_teacher = org.teacher_set.all()
         # 验证是否已收藏
         has_fav = False
-        if UserFavorite.objects.filter(user=request.user, fav_type=2, fav_id=org_id):
-            has_fav = True
+        if request.user.is_authenticated():
+            if UserFavorite.objects.filter(user=request.user, fav_type=2, fav_id=org_id):
+                has_fav = True
         return render(request, 'org-detail-teachers.html', {
             'org_id': org_id,
             'org': org,
